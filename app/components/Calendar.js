@@ -1,4 +1,4 @@
-import { getMonthMatrix } from '../lib/calendar';
+import { formatYMD, getMonthMatrix } from '../lib/calendar';
 
 const WEEKDAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
@@ -22,9 +22,10 @@ export default function Calendar({ year, month, dayIndex = {} }) {
         ))}
       </div>
 
-      {/* grid */}
+      {/* month grid */}
       <div
         role="grid"
+        aria-label="Month calendar"
         style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(7, 1fr)',
@@ -34,11 +35,19 @@ export default function Calendar({ year, month, dayIndex = {} }) {
         {weeks.map((week, wi) =>
           week.map((cell, di) => {
             const isEmpty = cell === null;
-            const hasEvents = !isEmpty && dayIndex[cell];
+            const eventsForDay = !isEmpty ? dayIndex[cell] || [] : [];
+            const hasEvents = eventsForDay.length > 0;
+
+            // Build the YYYY-MM-DD for this cell
+            const dateStr = !isEmpty
+              ? formatYMD(new Date(year, month, cell))
+              : null;
 
             return (
               <div
                 key={`${wi}-${di}`}
+                role="gridcell"
+                aria-disabled={isEmpty ? 'true' : 'false'}
                 style={{
                   position: 'relative',
                   aspectRatio: '1 / 1',
@@ -46,23 +55,43 @@ export default function Calendar({ year, month, dayIndex = {} }) {
                   borderRadius: '8px',
                   padding: '6px',
                   background: isEmpty ? '#f5f5f5' : 'white',
+                  overflow: 'hidden',
                 }}
               >
                 {!isEmpty && (
                   <>
-                    <span>{cell}</span>
+                    {/* day number */}
+                    <span style={{ fontWeight: 600 }}>{cell}</span>
+
+                    {/* clickable markers (one per event): /event/[date]/[index] */}
                     {hasEvents && (
-                      <span
+                      <div
+                        aria-label={`${eventsForDay.length} event(s)`}
                         style={{
                           position: 'absolute',
-                          top: 5,
-                          right: 5,
-                          width: 8,
-                          height: 8,
-                          borderRadius: '50%',
-                          background: '#0ea5e9',
+                          top: 6,
+                          right: 6,
+                          display: 'flex',
+                          flexDirection: 'column',
+                          gap: 4,
+                          alignItems: 'flex-end',
                         }}
-                      />
+                      >
+                        {eventsForDay.map((_, idx) => (
+                          <a
+                            key={idx}
+                            href={`/event/${dateStr}/${idx}`}
+                            title="Open event details"
+                            style={{
+                              display: 'inline-block',
+                              width: 8,
+                              height: 8,
+                              borderRadius: '50%',
+                              background: '#0ea5e9',
+                            }}
+                          />
+                        ))}
+                      </div>
                     )}
                   </>
                 )}

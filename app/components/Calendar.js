@@ -1,19 +1,16 @@
 import { getMonthMatrix } from '../lib/calendar';
 
-// Utility: simple weekday labels (Mon-first)
 const WEEKDAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
-// Renders a month grid for given year/month (0-based month)
-export default function Calendar({ year, month }) {
+export default function Calendar({ year, month, dayIndex = {} }) {
   const weeks = getMonthMatrix(year, month);
 
   return (
     <div>
-      {/* Weekday header row */}
+      {/* weekday headers */}
       <div
         className="row"
         style={{ justifyContent: 'space-between', marginBottom: '0.5rem' }}
-        aria-hidden="true"
       >
         {WEEKDAYS.map((d) => (
           <div
@@ -25,10 +22,9 @@ export default function Calendar({ year, month }) {
         ))}
       </div>
 
-      {/* Grid: 7 columns, N rows */}
+      {/* grid */}
       <div
         role="grid"
-        aria-label="Month calendar"
         style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(7, 1fr)',
@@ -38,26 +34,37 @@ export default function Calendar({ year, month }) {
         {weeks.map((week, wi) =>
           week.map((cell, di) => {
             const isEmpty = cell === null;
+            const hasEvents = !isEmpty && dayIndex[cell];
+
             return (
               <div
-                role="gridcell"
                 key={`${wi}-${di}`}
-                aria-disabled={isEmpty ? 'true' : 'false'}
                 style={{
+                  position: 'relative',
                   aspectRatio: '1 / 1',
-                  border: '1px solid #e5e7eb',
+                  border: '1px solid #ccc',
                   borderRadius: '8px',
-                  padding: '8px',
-                  display: 'flex',
-                  alignItems: 'flex-start',
-                  justifyContent: 'flex-start',
-                  background: isEmpty ? '#f8fafc' : '#fff',
+                  padding: '6px',
+                  background: isEmpty ? '#f5f5f5' : 'white',
                 }}
               >
                 {!isEmpty && (
-                  <span style={{ fontSize: '0.9rem', fontWeight: 600 }}>
-                    {cell}
-                  </span>
+                  <>
+                    <span>{cell}</span>
+                    {hasEvents && (
+                      <span
+                        style={{
+                          position: 'absolute',
+                          top: 5,
+                          right: 5,
+                          width: 8,
+                          height: 8,
+                          borderRadius: '50%',
+                          background: '#0ea5e9',
+                        }}
+                      />
+                    )}
+                  </>
                 )}
               </div>
             );

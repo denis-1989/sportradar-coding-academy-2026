@@ -49,8 +49,7 @@ export default function AddEventPage() {
         {/* date */}
         <div className="mt-2">
           <label htmlFor="date">
-            <strong>Date</strong>{' '}
-            <span style={{ color: '#64748b' }}>YYYY-MM-DD</span>
+            <strong>Date</strong> <span style={{ color: '#64748b' }}></span>
           </label>
           <input
             id="date"
@@ -72,8 +71,7 @@ export default function AddEventPage() {
         {/* time */}
         <div className="mt-2">
           <label htmlFor="time">
-            <strong>Time</strong>{' '}
-            <span style={{ color: '#64748b' }}>HH:MM optional</span>
+            <strong>Time</strong> <span style={{ color: '#64748b' }}></span>
           </label>
           <input
             id="time"
@@ -99,7 +97,7 @@ export default function AddEventPage() {
           <input
             id="sport"
             type="text"
-            placeholder="Football"
+            placeholder="Sport"
             value={sport}
             onChange={(e) => setSport(e.target.value)}
             required

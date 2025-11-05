@@ -9,8 +9,8 @@ function getEventByDateAndIndex(dateStr, idx) {
   return list[idx];
 }
 
-export default function EventDetailPage({ params }) {
-  const { date, i } = params;
+export default async function EventDetailPage({ params }) {
+  const { date, i } = await params;
   const idx = Number(i);
   const ev = getEventByDateAndIndex(date, idx);
 

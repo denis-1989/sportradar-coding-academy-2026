@@ -57,3 +57,11 @@ export function getTodayYearMonth() {
   const now = new Date();
   return { year: now.getFullYear(), month: now.getMonth() };
 }
+
+// Formats a JS Date (local) to YYYY-MM-DD (zero-padded)
+export function formatYMD(date) {
+  const y = date.getFullYear();
+  const m = String(date.getMonth() + 1).padStart(2, '0');
+  const d = String(date.getDate()).padStart(2, '0');
+  return `${y}-${m}-${d}`;
+}

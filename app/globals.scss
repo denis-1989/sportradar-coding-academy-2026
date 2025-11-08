@@ -85,3 +85,17 @@ a {
 a:hover {
   text-decoration: underline;
 }
+
+.day-number {
+  font-weight: 500;
+  display: block;
+}
+
+.event-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #2563eb; /* blue dot */
+  margin: 4px auto 0;
+  display: block;
+}

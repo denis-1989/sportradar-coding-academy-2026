@@ -38,7 +38,7 @@ export default function Calendar({ year, month, dayIndex = {} }) {
             const eventsForDay = !isEmpty ? dayIndex[cell] || [] : [];
             const hasEvents = eventsForDay.length > 0;
 
-            // Build the YYYY-MM-DD for this cell
+            // Build date string YYYY-MM-DD for linking
             const dateStr = !isEmpty
               ? formatYMD(new Date(year, month, cell))
               : null;
@@ -56,42 +56,29 @@ export default function Calendar({ year, month, dayIndex = {} }) {
                   padding: '6px',
                   background: isEmpty ? '#f5f5f5' : 'white',
                   overflow: 'hidden',
+                  textAlign: 'center',
                 }}
               >
                 {!isEmpty && (
                   <>
-                    {/* day number */}
+                    {/* Day number */}
                     <span style={{ fontWeight: 600 }}>{cell}</span>
 
-                    {/* clickable markers (one per event): /event/[date]/[index] */}
+                    {/* Single centered event dot indicator */}
                     {hasEvents && (
-                      <div
-                        aria-label={`${eventsForDay.length} event(s)`}
+                      <a
+                        href={`/event/${dateStr}/0`}
+                        aria-label="Open event details"
                         style={{
                           position: 'absolute',
-                          top: 6,
-                          right: 6,
-                          display: 'flex',
-                          flexDirection: 'column',
-                          gap: 4,
-                          alignItems: 'flex-end',
+                          left: '10%',
+                          bottom: '8px',
+                          width: '80%',
+                          height: '8px',
+                          background: '#2563eb',
+                          borderRadius: '3px',
                         }}
-                      >
-                        {eventsForDay.map((_, idx) => (
-                          <a
-                            key={idx}
-                            href={`/event/${dateStr}/${idx}`}
-                            title="Open event details"
-                            style={{
-                              display: 'inline-block',
-                              width: 12,
-                              height: 12,
-                              borderRadius: '50%',
-                              background: '#0ea5e9',
-                            }}
-                          />
-                        ))}
-                      </div>
+                      />
                     )}
                   </>
                 )}

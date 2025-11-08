@@ -3,26 +3,28 @@ import { formatYMD, getMonthMatrix } from '../lib/calendar';
 const WEEKDAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
 export default function Calendar({ year, month, dayIndex = {} }) {
+  // Generate calendar grid structure (weeks -> days)
   const weeks = getMonthMatrix(year, month);
 
   return (
     <div>
-      {/* weekday headers */}
-      <div
-        className="row"
-        style={{ justifyContent: 'space-between', marginBottom: '0.5rem' }}
-      >
-        {WEEKDAYS.map((d) => (
+      {/* Weekday header row */}
+      <div className="row space-between" style={{ marginBottom: '0.5rem' }}>
+        {WEEKDAYS.map((name) => (
           <div
-            key={d}
-            style={{ width: '14.28%', textAlign: 'center', fontWeight: 600 }}
+            key={name}
+            style={{
+              width: '14.28%',
+              textAlign: 'center',
+              fontWeight: 600,
+            }}
           >
-            {d}
+            {name}
           </div>
         ))}
       </div>
 
-      {/* month grid */}
+      {/* Calendar month grid */}
       <div
         role="grid"
         aria-label="Month calendar"
@@ -32,20 +34,20 @@ export default function Calendar({ year, month, dayIndex = {} }) {
           gap: '6px',
         }}
       >
-        {weeks.map((week, wi) =>
-          week.map((cell, di) => {
-            const isEmpty = cell === null;
-            const eventsForDay = !isEmpty ? dayIndex[cell] || [] : [];
+        {weeks.map((week, weekIndex) =>
+          week.map((day, dayIndexKey) => {
+            const isEmpty = day === null;
+            const eventsForDay = !isEmpty ? dayIndex[day] || [] : [];
             const hasEvents = eventsForDay.length > 0;
 
-            // Build date string YYYY-MM-DD for linking
+            // Format date string used for event detail page links
             const dateStr = !isEmpty
-              ? formatYMD(new Date(year, month, cell))
+              ? formatYMD(new Date(year, month, day))
               : null;
 
             return (
               <div
-                key={`${wi}-${di}`}
+                key={`${weekIndex}-${dayIndexKey}`}
                 role="gridcell"
                 aria-disabled={isEmpty ? 'true' : 'false'}
                 style={{
@@ -61,23 +63,15 @@ export default function Calendar({ year, month, dayIndex = {} }) {
               >
                 {!isEmpty && (
                   <>
-                    {/* Day number */}
-                    <span style={{ fontWeight: 600 }}>{cell}</span>
+                    {/* Display calendar day number */}
+                    <span className="day-number">{day}</span>
 
-                    {/* Single centered event dot indicator */}
+                    {/* Event bar indicator (stretched bar instead of dot) */}
                     {hasEvents && (
                       <a
                         href={`/event/${dateStr}/0`}
-                        aria-label="Open event details"
-                        style={{
-                          position: 'absolute',
-                          left: '10%',
-                          bottom: '8px',
-                          width: '80%',
-                          height: '8px',
-                          background: '#2563eb',
-                          borderRadius: '3px',
-                        }}
+                        aria-label="View event details"
+                        className="event-bar"
                       />
                     )}
                   </>

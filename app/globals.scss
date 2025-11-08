@@ -1,7 +1,9 @@
+/* Global reset */
 * {
   box-sizing: border-box;
 }
 
+/* Theme variables */
 :root {
   --background: #ffffff;
   --foreground: #171717;
@@ -20,6 +22,7 @@
   }
 }
 
+/* Base layout */
 html,
 body {
   max-width: 100vw;
@@ -35,6 +38,7 @@ body {
   line-height: 1.45;
 }
 
+/* Links */
 a {
   color: var(--link);
   text-decoration: none;
@@ -43,12 +47,14 @@ a:hover {
   text-decoration: underline;
 }
 
+/* Light / Dark mode accessibility */
 @media (prefers-color-scheme: dark) {
   html {
     color-scheme: dark;
   }
 }
 
+/* Container and spacing utility classes */
 .container {
   width: 100%;
   max-width: 960px;
@@ -61,9 +67,11 @@ a:hover {
   align-items: center;
   gap: 0.75rem;
 }
+
 .space-between {
   justify-content: space-between;
 }
+
 .mt-2 {
   margin-top: 0.5rem;
 }
@@ -71,13 +79,13 @@ a:hover {
   margin-top: 1rem;
 }
 
+/* Header */
 .site-header {
   position: sticky;
   top: 0;
   z-index: 10;
   background: #fff;
   border-bottom: 1px solid var(--border);
-
   box-shadow: 0 1px 0 rgba(0, 0, 0, 0.02);
 }
 
@@ -95,22 +103,29 @@ a:hover {
   color: inherit;
 }
 
+/* Navigation */
 .nav {
   display: flex;
   gap: 10px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
+
 .nav a {
   color: var(--foreground);
   text-decoration: none;
   padding: 6px 10px;
   border-radius: 8px;
 }
+
 .nav a:hover,
 .nav a:focus {
   background: rgba(2, 132, 199, 0.08);
   text-decoration: none;
 }
 
+/* Footer */
 .site-footer {
   border-top: 1px solid var(--border);
   color: var(--muted);
@@ -119,6 +134,7 @@ a:hover {
   font-size: 0.9rem;
 }
 
+/* Card layout */
 .card {
   background: #fff;
   border: 1px solid var(--border);
@@ -126,6 +142,7 @@ a:hover {
   padding: 20px;
 }
 
+/* Back link */
 .back-link {
   display: inline-block;
   color: var(--link);
@@ -137,6 +154,7 @@ a:hover {
   text-decoration: underline;
 }
 
+/* Event detail layout */
 .event-meta {
   display: grid;
   grid-template-columns: 140px 1fr;
@@ -144,9 +162,11 @@ a:hover {
   column-gap: 12px;
   margin-top: 16px;
 }
+
 .event-meta dt {
   color: #6b7280;
 }
+
 .event-meta dd {
   margin: 0;
 }
@@ -157,17 +177,41 @@ a:hover {
   }
 }
 
+/* Calendar day number */
 .day-number {
-  font-weight: 500;
+  font-weight: 600;
   display: block;
+  font-size: 15px;
 }
 
+/* Event indicator bar (instead of circle) */
 .event-bar {
   position: absolute;
-  left: 8px;
-  right: 8px;
-  bottom: 8px;
-  height: 4px;
-  border-radius: 9999px;
+  left: 10%;
+  right: 10%;
+  bottom: 6px;
+  height: 6px;
+  border-radius: 4px;
   background: #2563eb;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 640px) {
+  [role='grid'] {
+    gap: 4px !important;
+  }
+
+  [role='gridcell'] {
+    padding: 4px !important;
+    border-radius: 6px !important;
+  }
+
+  .day-number {
+    font-size: 13px;
+  }
+
+  .event-bar {
+    bottom: 4px !important;
+    height: 4px !important;
+  }
 }

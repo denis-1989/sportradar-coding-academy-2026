@@ -11,32 +11,32 @@ export default function AddEventPage() {
   const [sport, setSport] = useState('');
   const [teams, setTeams] = useState('');
 
-  // feedback messages
+  // feedback
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  // navigation
   const router = useRouter();
 
-  // handle submit
   async function onSubmit(e) {
     e.preventDefault();
+    if (loading) return;
+
     setError('');
     setSuccess('');
+    setLoading(true);
 
-    // validate and add
     const res = addEvent({ date, time, sport, teams });
 
-    // show error if something is wrong
     if (!res.ok) {
       setError(res.message || 'Could not add event');
+      setLoading(false);
       return;
     }
 
-    // show success
+    // optional: small confirmation before redirect
     setSuccess('Event added');
-
-    // go back to home to see the calendar
+    // redirect to calendar to see the new marker
     router.push('/');
   }
 
@@ -49,7 +49,7 @@ export default function AddEventPage() {
         {/* date */}
         <div className="mt-2">
           <label htmlFor="date">
-            <strong>Date</strong> <span style={{ color: '#64748b' }}></span>
+            <strong>Date</strong>
           </label>
           <input
             id="date"
@@ -68,7 +68,7 @@ export default function AddEventPage() {
           />
         </div>
 
-        {/* time */}
+        {/* time (optional) */}
         <div className="mt-2">
           <label htmlFor="time">
             <strong>Time</strong> <span style={{ color: '#64748b' }}></span>
@@ -97,7 +97,7 @@ export default function AddEventPage() {
           <input
             id="sport"
             type="text"
-            placeholder="Sport"
+            placeholder="Football"
             value={sport}
             onChange={(e) => setSport(e.target.value)}
             required
@@ -151,16 +151,17 @@ export default function AddEventPage() {
         <div className="row mt-4" style={{ gap: 12 }}>
           <button
             type="submit"
+            disabled={loading}
             style={{
               padding: '10px 16px',
               borderRadius: 10,
               border: '1px solid #e5e7eb',
-              background: '#111827',
+              background: loading ? '#374151' : '#111827',
               color: 'white',
-              cursor: 'pointer',
+              cursor: loading ? 'not-allowed' : 'pointer',
             }}
           >
-            Add Event
+            {loading ? 'Adding…' : 'Add Event'}
           </button>
 
           <a

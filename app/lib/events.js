@@ -14,11 +14,17 @@ export const events = [
   },
 ];
 
-export function buildDayIndex(events, year, month) {
+/**
+ * Build a day index for a given month.
+ * Example result: { 7: [event, event], 12: [event] }
+ */
+export function buildDayIndex(list, year, month) {
   const index = {};
 
-  for (const ev of events) {
+  for (const ev of list) {
     const d = new Date(ev.date + 'T00:00:00');
+    if (Number.isNaN(d.getTime())) continue;
+
     const y = d.getFullYear();
     const m = d.getMonth();
     const day = d.getDate();
@@ -32,51 +38,44 @@ export function buildDayIndex(events, year, month) {
   return index;
 }
 
+/**
+ * Add a new event in memory (no persistence).
+ * Returns { ok: true, event } or { ok: false, message }
+ */
 export function addEvent({ date, time, sport, teams }) {
-  // Step 1
-  // Check required fields
-  // Date sport and teams must not be empty
-  if (!date || !sport || !teams) {
-    return {
-      ok: false,
-      message: 'Please fill date sport and teams',
-    };
+  // normalize simple strings
+  const clean = {
+    date: (date || '').trim(),
+    time: (time || '').trim(),
+    sport: (sport || '').trim(),
+    teams: (teams || '').trim(),
+  };
+
+  // required fields
+  if (!clean.date || !clean.sport || !clean.teams) {
+    return { ok: false, message: 'Please fill date, sport and teams' };
   }
 
-  // Step 2
-  // Simple date format check
-  // This task does not require advanced validation
+  // date format YYYY-MM-DD
   const dateFormat = /^\d{4}-\d{2}-\d{2}$/;
-  if (!dateFormat.test(date)) {
-    return {
-      ok: false,
-      message: 'Date must be YYYY-MM-DD',
-    };
+  if (!dateFormat.test(clean.date)) {
+    return { ok: false, message: 'Date must be YYYY-MM-DD' };
   }
 
-  // Step 3
-  // Time is optional
-  // If user enters a time we check a simple format
-  const timeFormat = /^\d{2}:\d{2}$/;
-  if (time && !timeFormat.test(time)) {
-    return {
-      ok: false,
-      message: 'Time must be HH:MM',
-    };
+  // time is optional; if present must be HH:MM
+  if (clean.time && !/^\d{2}:\d{2}$/.test(clean.time)) {
+    return { ok: false, message: 'Time must be HH:MM' };
   }
 
-  // Step 4
-  // Add the new event to the in memory list
-  // This does not save to a database
-  // It stays only while the app is running
-  events.push({
-    date,
-    time,
-    sport,
-    teams,
-  });
+  // create and push
+  const ev = {
+    date: clean.date,
+    time: clean.time || undefined, // omit empty string
+    sport: clean.sport,
+    teams: clean.teams,
+  };
 
-  // Step 5
-  // Return success result
-  return { ok: true };
+  events.push(ev);
+
+  return { ok: true, event: ev };
 }

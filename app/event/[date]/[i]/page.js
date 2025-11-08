@@ -26,26 +26,32 @@ export default async function EventDetailPage({ params }) {
   }
 
   return (
-    <section>
-      <p>
-        <a href="/">← Back to Calendar</a>
-      </p>
-      <h1 className="mt-2">Event Details</h1>
-      <div className="mt-2">
-        <p>
-          <strong>Date:</strong> {ev.date}
-        </p>
-        {ev.time && (
-          <p>
-            <strong>Time:</strong> {ev.time}
-          </p>
-        )}
-        <p>
-          <strong>Sport:</strong> {ev.sport}
-        </p>
-        <p>
-          <strong>Teams / Participants:</strong> {ev.teams}
-        </p>
+    <section className="container">
+      <a href="/" className="back-link">
+        ← Back to Calendar
+      </a>
+
+      <div className="card">
+        <h1 className="mt-2">Event Details</h1>
+
+        {/* semantic list for labels and values */}
+        <dl className="event-meta">
+          <dt>Date:</dt>
+          <dd>{ev.date}</dd>
+
+          {ev.time && (
+            <>
+              <dt>Time:</dt>
+              <dd>{ev.time}</dd>
+            </>
+          )}
+
+          <dt>Sport:</dt>
+          <dd>{ev.sport}</dd>
+
+          <dt>Teams / Participants:</dt>
+          <dd>{ev.teams}</dd>
+        </dl>
       </div>
     </section>
   );

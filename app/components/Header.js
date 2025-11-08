@@ -1,20 +1,41 @@
-export default function Header() {
-  return (
-    <header className="site-header">
-      <div className="container row space-between">
-        <a href="/" aria-label="Go to calendar home">
-          <strong>Sport Calendar</strong>
-        </a>
+'use client';
 
-        <nav aria-label="Main navigation">
-          <div className="row">
-            <a href="/" data-test-id="nav-calendar">
-              Calendar
-            </a>
-            <a href="/add" data-test-id="nav-add">
-              Add Event
-            </a>
-          </div>
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+
+export default function Header() {
+  const pathname = usePathname();
+
+  function isActive(href) {
+    return pathname === href || pathname.startsWith(href + '/');
+  }
+
+  return (
+    <header className="site-header" role="banner">
+      <div className="container row space-between">
+        <Link href="/" className="brand">
+          Sport Calendar
+        </Link>
+
+        <nav aria-label="Main">
+          <ul className="nav">
+            <li>
+              <Link
+                href="/"
+                className={`nav-link ${isActive('/') ? 'active' : ''}`}
+              >
+                Calendar
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="/add"
+                className={`nav-link ${isActive('/add') ? 'active' : ''}`}
+              >
+                Add Event
+              </Link>
+            </li>
+          </ul>
         </nav>
       </div>
     </header>

@@ -112,17 +112,24 @@ a:hover {
   margin: 0;
 }
 
-.nav a {
+.nav-link {
   color: var(--foreground);
   text-decoration: none;
   padding: 6px 10px;
   border-radius: 8px;
 }
 
-.nav a:hover,
-.nav a:focus {
+.nav-link:hover,
+.nav-link:focus {
   background: rgba(2, 132, 199, 0.08);
   text-decoration: none;
+}
+
+/* highlight for active page */
+.nav-link.active {
+  background: rgba(2, 132, 199, 0.15);
+  color: #0ea5e9;
+  font-weight: 600;
 }
 
 /* Footer */

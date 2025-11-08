@@ -6,36 +6,34 @@ import { usePathname } from 'next/navigation';
 export default function Header() {
   const pathname = usePathname();
 
-  function isActive(href) {
-    return pathname === href || pathname.startsWith(href + '/');
+  // Helper that returns true if a link matches the active path
+  function isActive(path) {
+    return pathname === path;
   }
 
   return (
-    <header className="site-header" role="banner">
-      <div className="container row space-between">
+    <header className="site-header">
+      <div className="container">
+        {/* Brand / Logo */}
         <Link href="/" className="brand">
           Sport Calendar
         </Link>
 
-        <nav aria-label="Main">
-          <ul className="nav">
-            <li>
-              <Link
-                href="/"
-                className={`nav-link ${isActive('/') ? 'active' : ''}`}
-              >
-                Calendar
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="/add"
-                className={`nav-link ${isActive('/add') ? 'active' : ''}`}
-              >
-                Add Event
-              </Link>
-            </li>
-          </ul>
+        {/* Navigation links */}
+        <nav className="nav">
+          <Link
+            href="/"
+            className={isActive('/') ? 'nav-link active' : 'nav-link'}
+          >
+            Calendar
+          </Link>
+
+          <Link
+            href="/add"
+            className={isActive('/add') ? 'nav-link active' : 'nav-link'}
+          >
+            Add Event
+          </Link>
         </nav>
       </div>
     </header>

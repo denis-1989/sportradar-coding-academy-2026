@@ -1,17 +1,33 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Sports Event Calender
+
+This project was created as part of the 2026 Sportradar Coding Academy application process.
+The goal is to build a simple, interactive sports event calendar that allows users to view scheduled events, see event details, and add new events during runtime.
+
+## Screenshots
+
+### Calendar View
+
+![Calendar Screenshot](public/calendar.png)
+
+### Event Details
+
+![Event Details Screenshot](public/event-details.png)
+
+## Tech Stack
+
+- Next.js App Router
+- React Client Components and Hooks
+- SCSS for styling
+- Java Script data structure
 
 ## Getting Started
 
 First, run the development server:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+pnpm install
 pnpm dev
-# or
-bun dev
+
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
@@ -20,17 +36,24 @@ You can start editing the page by modifying `app/page.js`. The page auto-updates
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-## Learn More
+## File Structure
 
-To learn more about Next.js, take a look at the following resources:
+app/
+page.js → Calendar overview
+add/page.js → Add Event form
+event/[date]/[i]/page.js → Event Details page
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+components/
+Calendar.js → Month grid renderer
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+lib/
+calendar.js → Calendar matrix helpers
+events.js → Event list + addEvent()
 
-## Deploy on Vercel
+## What i learned
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- How to generate a calendar grid dynamically using data logic
+- How to map structured data events to UI elements and highlight active days
+- How to handle client side navogation and dynamic routes in next.js
+- How to use React state to manage form inputs and runtime added data
+- how to apply responsive UI principles for multiple screen sizes

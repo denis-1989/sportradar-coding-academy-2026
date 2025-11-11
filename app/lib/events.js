@@ -79,3 +79,26 @@ export function addEvent({ date, time, sport, teams }) {
 
   return { ok: true, event: ev };
 }
+
+// Returns a sorted list of unique sport names found in the list
+export function listSports(list) {
+  const set = new Set();
+  for (const ev of list) {
+    if (ev.sport && ev.sport.trim()) set.add(ev.sport.trim());
+  }
+  return Array.from(set).sort();
+}
+
+// Returns a new list filtered by sport and date range
+export function filterEvents(list, { sport, from, to } = {}) {
+  return list.filter((ev) => {
+    // sport filter
+    if (sport && sport !== 'ALL' && ev.sport !== sport) return false;
+
+    // date range filter: inclusive on both ends
+    if (from && ev.date < from) return false;
+    if (to && ev.date > to) return false;
+
+    return true;
+  });
+}

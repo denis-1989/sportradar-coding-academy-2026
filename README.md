@@ -13,6 +13,10 @@ The goal is to build a simple, interactive sports event calendar that allows use
 
 ![Event Details Screenshot](public/event-details.png)
 
+### Filter events
+
+![Calendar Filters Screenshot](public/Filter-events.png)
+
 ## Tech Stack
 
 - Next.js App Router

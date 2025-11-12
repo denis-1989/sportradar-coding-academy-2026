@@ -1,0 +1,37 @@
+AI Reflection
+
+During this project I used AI (ChatGPT) mainly as a learning support tool. I am still at a beginner junior level, so I needed help in understanding how to structure the project step by step. The AI helped me the most with:
+- Planning the folder structure and project setup
+- Understanding how to work with Next.js app router
+- Explaining code line by line when I didn’t fully understand something
+- Improving naming, readability and formatting
+- Helping me write cleaner CSS and layout utilities
+- Giving me guidance when I got stuck or confused
+
+However, the main logic and implementation were written by me. I typed all the code manually, I refactored it while testing, and I made sure I understood every part before continuing. I did not copy paste a finished solution. Every feature was built slowly and in small steps, and I tested it myself in the browser.
+
+Examples of parts I wrote myself:
+- The calendar grid logic and how days are displayed
+- The dynamic event detail routing (/event/[date]/[index])
+- The form for adding new events and the state handling
+- The day indicator bar UI and responsiveness
+- The filter feature for searching by sport and team
+- The full layout using SCSS and utility classes
+
+How I verified AI suggestions:
+I always checked the code by:
+- Reading what each line does
+- Trying to explain it to myself out loud
+- Testing the behavior in the browser
+- Modifying some parts to see if I really understood it
+
+If something didn’t make sense, I asked the AI to explain it more simply instead of just accepting the answer.
+
+Technical decisions:
+I chose to use:
+- Next.js App Router because that is what I learned in my bootcamp
+- SCSS instead of Tailwind, to keep styles simple and understandable
+
+
+If I had more time:
+I would improve the filtering features, add animations, and possibly add Local Storage so events are saved after page refresh. I would also like to add automated tests  to simulate user interactions.

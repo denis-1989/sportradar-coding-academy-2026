@@ -1,16 +1,14 @@
 'use client';
 
 import { useState } from 'react';
-import { buildDayIndex, events, filterEvents, listSports } from '../lib/events';
+import { buildDayIndex, events as allEvents } from '../lib/events';
 import Calendar from './Calendar';
 
-// Moves a month forward/backward
 function addMonth(year, month, delta) {
   const d = new Date(year, month + delta, 1);
   return { year: d.getFullYear(), month: d.getMonth() };
 }
 
-// Formats the current header like "November 2025"
 function formatMonthYear(year, month) {
   return new Date(year, month, 1).toLocaleDateString('en', {
     month: 'long',
@@ -18,25 +16,29 @@ function formatMonthYear(year, month) {
   });
 }
 
+// Helper to check if filters are active
+function hasActiveFilters(sport, from, to) {
+  return (sport && sport !== 'all') || from || to;
+}
+
 export default function CalendarView({ initialYear, initialMonth }) {
-  // State that controls which month is shown
   const [ym, setYm] = useState({ year: initialYear, month: initialMonth });
 
-  // Filter state (sport and date range)
-  const [sport, setSport] = useState('ALL');
+  // Filters state
+  const [sport, setSport] = useState('all');
   const [from, setFrom] = useState('');
   const [to, setTo] = useState('');
 
-  // Options for the sport dropdown
-  const sportOptions = listSports(events);
+  // Filter events dynamically
+  const filteredEvents = allEvents.filter((ev) => {
+    if (sport !== 'all' && ev.sport !== sport) return false;
+    if (from && ev.date < from) return false;
+    if (to && ev.date > to) return false;
+    return true;
+  });
 
-  // Apply filters to the full list
-  const filtered = filterEvents(events, { sport, from, to });
+  const dayIndex = buildDayIndex(filteredEvents, ym.year, ym.month);
 
-  // Build day → events index using the filtered list
-  const dayIndex = buildDayIndex(filtered, ym.year, ym.month);
-
-  // Month navigation handlers
   function prevMonth() {
     setYm((cur) => addMonth(cur.year, cur.month, -1));
   }
@@ -48,96 +50,84 @@ export default function CalendarView({ initialYear, initialMonth }) {
     setYm({ year: now.getFullYear(), month: now.getMonth() });
   }
 
-  // Resets the filters to their initial values
-  function clearFilters() {
-    setSport('ALL');
+  // Reset filters function
+  function resetFilters() {
+    setSport('all');
     setFrom('');
     setTo('');
   }
 
   return (
     <section>
-      {/* Filters bar */}
-      <div className="filters card">
+      <h1>Filters</h1>
+
+      {/* FILTERS */}
+      <div className="card filters">
         <div className="row wrap">
-          {/* Sport dropdown */}
-          <label className="filter-item">
-            <span className="label">Sport</span>
+          {/* Sport */}
+          <div className="filter-item">
+            <label className="label">Sport</label>
             <select
+              className="input"
               value={sport}
               onChange={(e) => setSport(e.target.value)}
-              className="input"
             >
-              <option value="ALL">All sports</option>
-              {sportOptions.map((s) => (
-                <option key={s} value={s}>
-                  {s}
-                </option>
-              ))}
+              <option value="all">All sports</option>
+              <option value="Football">Football</option>
+              <option value="Ice Hockey">Ice Hockey</option>
             </select>
-          </label>
+          </div>
 
-          {/* From date */}
-          <label className="filter-item">
-            <span className="label">From</span>
+          {/* From */}
+          <div className="filter-item">
+            <label className="label">From</label>
             <input
               type="date"
+              className="input"
               value={from}
               onChange={(e) => setFrom(e.target.value)}
-              className="input"
             />
-          </label>
+          </div>
 
-          {/* To date */}
-          <label className="filter-item">
-            <span className="label">To</span>
+          {/* To */}
+          <div className="filter-item">
+            <label className="label">To</label>
             <input
               type="date"
+              className="input"
               value={to}
               onChange={(e) => setTo(e.target.value)}
-              className="input"
             />
-          </label>
+          </div>
 
-          {/* Clear */}
-          <button type="button" onClick={clearFilters} className="btn ghost">
-            Clear
-          </button>
-
-          {/* Small hint with how many events match */}
-          <div className="hint">{filtered.length} event(s) match</div>
-        </div>
-      </div>
-
-      {/* Month header with controls */}
-      <div className="row space-between mt-4">
-        <h2 style={{ margin: 0 }}>{formatMonthYear(ym.year, ym.month)}</h2>
-        <div className="row">
+          {/* Reset Filters */}
           <button
-            onClick={prevMonth}
-            aria-label="Previous month"
-            className="btn ghost"
+            type="button"
+            className="btn outline"
+            onClick={resetFilters}
+            disabled={!hasActiveFilters(sport, from, to)}
+            style={{ marginTop: '24px' }}
           >
-            Prev
-          </button>
-          <button
-            onClick={goToday}
-            aria-label="Go to current month"
-            className="btn ghost"
-          >
-            Today
-          </button>
-          <button
-            onClick={nextMonth}
-            aria-label="Next month"
-            className="btn ghost"
-          >
-            Next
+            Reset filters
           </button>
         </div>
       </div>
 
-      {/* Calendar grid (uses filtered index) */}
+      {/* CALENDAR */}
+      <h2 className="mt-4">{formatMonthYear(ym.year, ym.month)}</h2>
+
+      <div className="row mt-2">
+        <button className="btn outline" onClick={prevMonth}>
+          Prev
+        </button>
+        <button className="btn outline" onClick={goToday}>
+          Today
+        </button>
+        <button className="btn outline" onClick={nextMonth}>
+          Next
+        </button>
+      </div>
+
       <div className="mt-4">
         <Calendar year={ym.year} month={ym.month} dayIndex={dayIndex} />
       </div>
